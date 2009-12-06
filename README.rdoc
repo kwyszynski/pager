@@ -2,16 +2,39 @@
 
 Description goes here.
 
-== Note on Patches/Pull Requests
+== Usage
+
  
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but
-   bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+class FoosController < ApplicationController
+
+	def show
+		@foo = Foo.find(params[:id]) 
+		
+		@pager = Pager.new(@foo, edit_anfrage_path(@foo, :page => "%_PAGE"), params[:page], 20, true)
+
+	end	
+end
+
+
+show.erb:
+
+<% @pager.result_list.each do |result_entry| %>	
+	<div>
+		<%=result_entry%>
+	</div>
+<%end%>
+
+<% @pager.links.each do |pager| %>
+	<% if pager.is_page %>
+		<% if pager.is_current_page %>
+			<a href="<%=pager.url%>" class="active"><%=pager.label%></a>
+		<% else %>
+			<a href="<%=pager.url%>" class="inactive"><%=pager.label%></a>
+		<% end %>
+	<% else %>
+		<span >...</span>
+	<% end %>
+<% end %>
 
 == Copyright
 
